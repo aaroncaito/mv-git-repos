@@ -1,0 +1,68 @@
+#! /bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+function USAGE()
+{
+echo "Moves a git repo and assigns it the proper group permissions"
+echo
+echo "usage: $0 [-h] -g <from group> -d <destination> [-G <to group>]"
+echo
+echo "OPTIONS:"
+echo "	-h		This help message"
+echo "	-d		Specify the destination for repos"
+echo "  -g    Specify a local group"
+echo "  -G    Specify a remote group"
+echo "	-u		Specify a local username  <Does not work>"
+echo "  -U    Specify a remote username  <Does not work>"
+echo "  -f    Specify a file of usernames <Does not work>"
+echo
+exit $E_OPTERROR
+}
+
+GROUP_BASE_DIR=''
+USER_BASE_DIR=''
+
+while getopts ":hdg:G:" opt
+do
+  case $opt in
+  d)
+    destination=$OPTARG
+    ;;
+  g)
+    group_local=$OPTARG
+    ;;
+  G)
+    group_remote=$OPTARG
+    ;;
+  h)
+    USAGE
+    ;;
+  \?)
+		echo "Unkown option: -$OPTARG" >&2
+		USAGE
+		;;
+	:)
+		echo "Missing option argument for -$OPTARG" >&2
+		USAGE
+		;;
+  *)
+    echo "invalid option: $opt"
+    echo
+    USAGE
+    ;;
+  esac
+done
+
+if [ -z $destination ]
+then
+  echo "Must specify a destination with the -d option"
+fi
+
+if [ -z $group_local ]
+then
+  echo "Must specify a group with the -g option"
+fi
