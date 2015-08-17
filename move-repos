@@ -12,11 +12,11 @@ echo
 echo "usage: $0 [-h] -g <from group> -d <destination> [-G <to group>]"
 echo
 echo "OPTIONS:"
-echo "	-h		This help message"
-echo "	-d		Specify the destination for repos"
+echo "  -h    This help message"
+echo "  -d    Specify the destination for repos"
 echo "  -g    Specify a local group"
 echo "  -G    Specify a remote group"
-echo "	-u		Specify a local username  <Does not work>"
+echo "  -u    Specify a local username  <Does not work>"
 echo "  -U    Specify a remote username  <Does not work>"
 echo "  -f    Specify a file of usernames <Does not work>"
 echo
@@ -42,13 +42,13 @@ do
     USAGE
     ;;
   \?)
-		echo "Unkown option: -$OPTARG" >&2
-		USAGE
-		;;
-	:)
-		echo "Missing option argument for -$OPTARG" >&2
-		USAGE
-		;;
+    echo "Unkown option: -$OPTARG" >&2
+    USAGE
+    ;;
+  :)
+    echo "Missing option argument for -$OPTARG" >&2
+    USAGE
+    ;;
   *)
     echo "invalid option: $opt"
     echo
