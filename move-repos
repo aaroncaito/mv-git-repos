@@ -23,7 +23,8 @@ echo
 exit $E_OPTERROR
 }
 
-GROUP_BASE_DIR=''
+GROUP_LOCAL_BASE_PATH=''
+GROUP_REMOTE_BASE_PATH=''
 USER_BASE_DIR=''
 
 while getopts ":hdg:G:" opt
@@ -42,7 +43,7 @@ do
     USAGE
     ;;
   \?)
-    echo "Unkown option: -$OPTARG" >&2
+    echo "Unknown option: -$OPTARG" >&2
     USAGE
     ;;
   :)
@@ -50,7 +51,7 @@ do
     USAGE
     ;;
   *)
-    echo "invalid option: $opt"
+    echo "Invalid option: $opt"
     echo
     USAGE
     ;;
@@ -66,3 +67,18 @@ if [ -z $group_local ]
 then
   echo "Must specify a group with the -g option"
 fi
+
+group_local_path = ${GROUP_LOCAL_BASE_PATH}/${group_local}
+if [ $group_remote ]
+then
+  group_remote_path = ${GROUP_REMOTE_BASE_PATH}/${group_remote}
+else
+  group_remote_path = ${GROUP_REMOTE_BASE_PATH}/${group_local}
+fi
+
+for project in "ls ${group_local_path}"
+do
+  tar -pcvzf ${group_remote_path}/${project} ${project}.tar.gz
+  scp ${project}.tar.gz ${destination}:${group_remote_path}
+  rm ${project}.tar.gz
+done
