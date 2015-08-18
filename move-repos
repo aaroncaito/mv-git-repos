@@ -69,6 +69,7 @@ then
 fi
 
 group_local_path = ${GROUP_LOCAL_BASE_PATH}/${group_local}
+# Set remote group owner appropriately
 if [ $group_remote ]
 then
   group_remote_path = ${GROUP_REMOTE_BASE_PATH}/${group_remote}
@@ -76,9 +77,19 @@ else
   group_remote_path = ${GROUP_REMOTE_BASE_PATH}/${group_local}
 fi
 
+function CHANGE_ORIGIN()
+{
+# Need to change origin in .git/config to ${destination}
+# sed s/'toolbox.core.apparatus.net':\/group_local_path/${destination}:\/${group_remote_path}/g
+}
+
+# Ball and ship
 for project in "ls ${group_local_path}"
 do
+  CHANGE_ORIGIN
   tar -pcvzf ${group_remote_path}/${project} ${project}.tar.gz
   scp ${project}.tar.gz ${destination}:${group_remote_path}
   rm ${project}.tar.gz
 done
+
+# Remote stuff unpack, set perms
